@@ -1,41 +1,81 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+require('dotenv').config()
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const express = require('express')
+const jwt = require('jsonwebtoken')
+const middleware = require('./middleware/auth')
 
-var app = express();
+const app = express()
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+app.use(express.json())
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+const { QueryTypes } = require("sequelize");
+const { models } = require("./models");
+const sq = require("./models/index");
+sq.sequelize
+    .authenticate()
+    .then(() => console.log("Database connected"))
+    .catch((err) => console.log(err));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// database
+let users = [{
+        id: 1,
+        username: 'henry',
+        refreshToken: null
+    },
+    {
+        id: 2,
+        username: 'jim',
+        refreshToken: null
+    }
+]
+const Account = require("./controllers/Account/accountController");
+const History = require("./controllers/History/historyController");
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// app
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
 
-module.exports = app;
+app.post('/login', (req, res) => {
+    Account.find(req, res)
+})
+
+app.delete('/logout', middleware.verifyToken, (req, res) => {
+    //Account.delete(req, res)
+    console.log("hi")
+
+    console.log(req.id)
+
+})
+app.post('/update', middleware.verifyToken2, (req, res) => {
+    Account.updateMoney(req, res)
+})
+
+/*app.post('/token', (req, res) => {
+    const refreshToken = req.body.refreshToken
+    if (!refreshToken) return res.sendStatus(401)
+
+    const user = users.find(user => user.refreshToken === refreshToken)
+    if (!user) return res.sendStatus(403)
+
+    try {
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+
+        const tokens = generateTokens(user)
+        updateRefreshToken(user.username, tokens.refreshToken)
+
+        res.json(tokens)
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(403)
+    }
+})
+
+app.delete('/logout', verifyToken, (req, res) => {
+    const user = users.find(user => user.id === req.userId)
+
+    res.sendStatus(204)
+})*/
+
+const PORT = process.env.PORT || 5000
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
