@@ -1,7 +1,8 @@
 const service = require("../../models/Services/Account");
 const history = require("../History/historyController")
 const jwt = require('jsonwebtoken')
-const max_debt = -100
+const max_debt = -100000000
+const admin_id = '1'
 const generateTokens = (id) => {
 
     // Create JWT
@@ -95,8 +96,14 @@ const updateMoney = async(req, res) => {
         const newMoney = money + parseInt(acc.total_money, 10)
         if (newMoney >= max_debt) {
             history.add(id, money)
-
             service.updateMoney(acc, newMoney);
+            if (money < 0) {
+                var admin = await service.findById(admin_id);
+                console.log(admin)
+                service.updateMoney(admin, parseInt(admin.total_money, 10) - money);
+
+            }
+
             res.sendStatus(201)
         } else {
             res.sendStatus(405)
