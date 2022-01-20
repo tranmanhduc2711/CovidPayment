@@ -1,7 +1,7 @@
 const service = require("../../models/Services/Account");
 const history = require("../History/historyController")
 const jwt = require('jsonwebtoken')
-const max_debt = -100000000
+const max_debt = -500000
 const admin_id = '1'
 const generateTokens = (id) => {
 

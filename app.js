@@ -3,11 +3,16 @@ require('dotenv').config()
 const express = require('express')
 const jwt = require('jsonwebtoken')
 const middleware = require('./middleware/auth')
-
+const fs = require('fs');
+const https = require('https');
 const app = express()
 
 app.use(express.json())
 
+const options = {
+  key: fs.readFileSync("./cert.key"),
+  cert: fs.readFileSync("./cert.crt"),
+};
 const { QueryTypes } = require("sequelize");
 const { models } = require("./models");
 const sq = require("./models/index");
@@ -78,5 +83,5 @@ app.get('/find/:id', (req, res) => {
     })*/
 
 const PORT = process.env.PORT || 8000
-
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+https.createServer(options, app).listen(PORT);
+//app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
