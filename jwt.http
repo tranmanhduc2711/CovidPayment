@@ -1,0 +1,10 @@
+GET http://localhost:8000/data
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZm9vYmFyIiwiaWF0IjoxNjQyNTExMDY2LCJleHAiOjE2NDI1MTEwOTZ9.Y-_EtCe2m4ZvBV2WKiHFPPiaWX_Ld06Xjov8pahsNvE
+###
+
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+    "username": "Tran Manh Duc"
+}
