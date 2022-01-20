@@ -20,6 +20,7 @@ const verifyToken = (req, res, next) => {
 const verifyToken2 = (req, res, next) => {
     const authHeader = req.body.Authorization
     const token = authHeader && authHeader.split(' ')[1]
+    console.log(authHeader)
 
     if (!token) return res.sendStatus(401)
 

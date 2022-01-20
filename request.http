@@ -1,22 +1,18 @@
-GET http://localhost:4000/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJqaW0iLCJpYXQiOjE2NDI2MDc2NjksImV4cCI6MTY0MjYwNzk2OX0.9f_TJ2cUgurWdDhhtAprDYdqe3uQt6JXhbcA-emih2A
 
-###
 
 POST http://localhost:5000/login
 Content-Type: application/json
 
 {
-  "id": 4
+  "id": 5
 }
 
 ###
-
-POST http://localhost:5000/token
+POST http://localhost:5000/signup
 Content-Type: application/json
 
 {
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJqaW0iLCJpYXQiOjE2NDI2MDc4NjgsImV4cCI6MTY0MjYxMTQ2OH0.95SKVuKe2-gjGj-iole0e-M3ET33rjvxTlR4j4lEw2c"
+  "id": 7
 }
 
 ###
@@ -28,6 +24,9 @@ POST http://localhost:5000/update
 Content-Type: application/json
 
 {
-  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjQyNjE1OTM1LCJleHAiOjE2NDI2MTYyMzV9.a2eoNV6_xqxixg50ylmp01kWSdUk9CLtODPGONFroQ8",
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjQyNjYyMzU5LCJleHAiOjE2NDI2NjI2NTl9.LRXZmAVrcF58gqjJryWvo6A6HYqeyGN3j1r20JaKHaQ",
   "Money": 10
 }
+###
+GET http://localhost:5000/find
+

@@ -16,18 +16,7 @@ sq.sequelize
     .then(() => console.log("Database connected"))
     .catch((err) => console.log(err));
 
-// database
-let users = [{
-        id: 1,
-        username: 'henry',
-        refreshToken: null
-    },
-    {
-        id: 2,
-        username: 'jim',
-        refreshToken: null
-    }
-]
+
 const Account = require("./controllers/Account/accountController");
 const History = require("./controllers/History/historyController");
 
@@ -36,45 +25,51 @@ const History = require("./controllers/History/historyController");
 
 
 app.post('/login', (req, res) => {
-    Account.find(req, res)
+    Account.login(req, res)
 })
-
+app.post('/signup', (req, res) => {
+    Account.add(req, res)
+})
 app.delete('/logout', middleware.verifyToken, (req, res) => {
     //Account.delete(req, res)
-    console.log("hi")
+    res.sendStatus(204)
 
-    console.log(req.id)
 
 })
 app.post('/update', middleware.verifyToken2, (req, res) => {
     Account.updateMoney(req, res)
 })
+app.get('/find', (req, res) => {
+        Account.find(req, res)
+            //res.sendStatus(204)
 
-/*app.post('/token', (req, res) => {
-    const refreshToken = req.body.refreshToken
-    if (!refreshToken) return res.sendStatus(401)
 
-    const user = users.find(user => user.refreshToken === refreshToken)
-    if (!user) return res.sendStatus(403)
+    })
+    /*app.post('/token', (req, res) => {
+        const refreshToken = req.body.refreshToken
+        if (!refreshToken) return res.sendStatus(401)
 
-    try {
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+        const user = users.find(user => user.refreshToken === refreshToken)
+        if (!user) return res.sendStatus(403)
 
-        const tokens = generateTokens(user)
-        updateRefreshToken(user.username, tokens.refreshToken)
+        try {
+            jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
 
-        res.json(tokens)
-    } catch (error) {
-        console.log(error)
-        res.sendStatus(403)
-    }
-})
+            const tokens = generateTokens(user)
+            updateRefreshToken(user.username, tokens.refreshToken)
 
-app.delete('/logout', verifyToken, (req, res) => {
-    const user = users.find(user => user.id === req.userId)
+            res.json(tokens)
+        } catch (error) {
+            console.log(error)
+            res.sendStatus(403)
+        }
+    })
 
-    res.sendStatus(204)
-})*/
+    app.delete('/logout', verifyToken, (req, res) => {
+        const user = users.find(user => user.id === req.userId)
+
+        res.sendStatus(204)
+    })*/
 
 const PORT = process.env.PORT || 5000
 

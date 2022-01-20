@@ -1,7 +1,7 @@
 const service = require("../../models/Services/Account");
 const history = require("../History/historyController")
 const jwt = require('jsonwebtoken')
-
+const max_debt = -100
 const generateTokens = (id) => {
 
     // Create JWT
@@ -31,34 +31,49 @@ const generateTokens = (id) => {
         return user
     })
 }*/
-const add = (id_covid_manager) => {
-    const acc = {
-        id_covid_manager: id_covid_manager,
-        total_money: 0
-    };
-    service.addAccount(acc)
+const add = async(req, res) => {
+    const id = req.body.id
+    const account = await service.findByCovidServerId(id)
+    if (account == null || account[0] == undefined) {
+        const acc = {
+            id_covid_manager: id,
+            total_money: 0
+        };
+        service.addAccount(acc)
+        res.sendStatus(201)
+
+    } else {
+        res.sendStatus(405)
+    }
+
 };
 
-const find = async(req, res) => {
+const login = async(req, res) => {
     const id = req.body.id
     service.findByCovidServerId
     const account = await service.findByCovidServerId(id)
-        //console.log(id)
     console.log(account[0])
 
     if (account == null || account[0] == undefined)
-        add(id)
-    const tokens = generateTokens(id)
-        //updateRefreshToken(id, tokens.refreshToken)
+        res.sendStatus(401)
+    else {
+        const tokens = generateTokens(id)
+            //updateRefreshToken(id, tokens.refreshToken)
 
-    res.json(tokens)
+        res.json(tokens)
+    }
+
 
 };
 const deleteAccount = async(req, res) => {
     const id = req.body.id
 
-};
 
+};
+const find = async(req, res) => {
+    const account = await service.findAccountHaveMaxDebt()
+    res.json(account)
+};
 const updateMoney = async(req, res) => {
     const id = req.id
     const money = parseInt(req.body.Money, 10);
@@ -67,11 +82,20 @@ const updateMoney = async(req, res) => {
     var acc = await service.findByCovidServerId(id);
     if (acc != null && acc[0] != undefined) {
         acc = acc[0];
-        history.add(id, money)
         const newMoney = money + parseInt(acc.total_money, 10)
-        service.updateMoney(acc, newMoney);
+        if (newMoney >= max_debt) {
+            history.add(id, money)
+
+            service.updateMoney(acc, newMoney);
+            res.sendStatus(201)
+        } else {
+            res.sendStatus(405)
+        }
+    } else {
+        res.sendStatus(405)
+
     }
     console.log(acc);
 }
 
-module.exports = { add, updateMoney, find, deleteAccount };
+module.exports = { add, updateMoney, deleteAccount, login, find };

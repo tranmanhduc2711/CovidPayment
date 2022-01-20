@@ -1,6 +1,7 @@
 const { models } = require("..");
 const { QueryTypes } = require("sequelize");
 const sq = require("../index");
+const max_debt = -100
 async function test() {
     const t = await models.Account.findAll({ raw: true });
     console.log(t);
@@ -48,6 +49,21 @@ const findByCovidServerId = async(id) => {
     }
 }
 
+const findAccountHaveMaxDebt = async() => {
+    try {
+        return await models.Account.findAll({
+            where: {
+                total_money: 1010,
+            },
+            raw: true,
+
+            //Other parameters
+
+        })
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 
 /*
@@ -82,4 +98,4 @@ const updateAccount = async(account) => {
         console.log(err);
     }
 }*/
-module.exports = { findByCovidServerId, updateMoney, addAccount };
+module.exports = { findByCovidServerId, updateMoney, addAccount, findAccountHaveMaxDebt };
