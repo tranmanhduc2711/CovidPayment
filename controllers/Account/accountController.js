@@ -74,6 +74,16 @@ const find = async(req, res) => {
     const account = await service.findAccountHaveMaxDebt()
     res.json(account)
 };
+const findID = async(req, res) => {
+    const id = req.params.id
+    const account = await service.findByCovidServerId(id)
+    if (account == null || account[0] == undefined) {
+        res.status(405)
+    } else {
+        res.json(account[0])
+
+    }
+};
 const updateMoney = async(req, res) => {
     const id = req.id
     const money = parseInt(req.body.Money, 10);
@@ -98,4 +108,4 @@ const updateMoney = async(req, res) => {
     console.log(acc);
 }
 
-module.exports = { add, updateMoney, deleteAccount, login, find };
+module.exports = { add, updateMoney, deleteAccount, login, find, findID };

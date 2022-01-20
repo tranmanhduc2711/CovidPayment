@@ -40,7 +40,13 @@ app.post('/update', middleware.verifyToken2, (req, res) => {
     Account.updateMoney(req, res)
 })
 app.get('/find', (req, res) => {
-        Account.find(req, res)
+    Account.find(req, res)
+        //res.sendStatus(204)
+
+
+})
+app.get('/find/:id', (req, res) => {
+        Account.findID(req, res)
             //res.sendStatus(204)
 
 

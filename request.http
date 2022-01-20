@@ -29,4 +29,6 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:5000/find
+###
+GET http://localhost:5000/find/1
 
