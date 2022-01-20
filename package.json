@@ -6,7 +6,6 @@
     "scripts": {
         "start": "nodemon app",
         "startT": "nodemon test",
-
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "",
