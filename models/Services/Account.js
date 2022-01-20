@@ -48,6 +48,22 @@ const findByCovidServerId = async(id) => {
         console.log(err);
     }
 }
+const findById = async(id) => {
+    try {
+        const result = await models.Account.findAll({
+            where: {
+                id: id
+            },
+
+            raw: true,
+            //Other parameters
+
+        })
+        return result[0]
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 const findAccountHaveMaxDebt = async() => {
     try {
@@ -98,4 +114,4 @@ const updateAccount = async(account) => {
         console.log(err);
     }
 }*/
-module.exports = { findByCovidServerId, updateMoney, addAccount, findAccountHaveMaxDebt };
+module.exports = { findByCovidServerId, updateMoney, addAccount, findAccountHaveMaxDebt, findById };
